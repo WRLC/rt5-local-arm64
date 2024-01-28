@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  rt5-apache:
+    image: tomboone/rt5-apache:latest
+    volumes:
+      - ./rt5/RT_SiteConfig.pm:/opt/rt5/etc/RT_SiteConfig.pm:ro
+      - ./apache2/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
+    ports:
+      - "8080:80"
+    command: apachectl -D FOREGROUND
+
+  rt5-mariadb:
+    image: tomboone/rt5-mariadb:latest
+    ports:
+      - "8000:3306"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=rt5
+      - MARIADB_PASSWORD=rt5
+      - MARIADB_DATABASE=rt5
+      - MARIADB_ROOT_PASSWORD=rt5
